@@ -1,16 +1,12 @@
 #pragma once
-#include "Matrix.h"
 #include "Environment.h"
 #include "Model.h"
-
-
-
 
 template <typename T>
 class AbstractAgent {
 
 protected:
-	float reward;
+	double reward;
 
 public:
 	AbstractAgent() {}
@@ -19,18 +15,23 @@ public:
 	virtual void doAction(Environment state, const Matrix& action) = 0;
 
 	void setReward(float reward) { this->reward += reward; }
-	float getReward() {	return reward; }
+	double getReward() { return reward; }
 };
 
 namespace test {
+	using namespace test;
+
 	template <typename T>
 	class Agent : AbstractAgent {
 		T agentModel;
 	public:
-		Agent(const Model model) {
+		Agent(const Model model) : AbstractAgent() {
 			agentModel = model;
 		}
-		void doAction(Environment state, const Matrix& action) override { }
+		void doAction(Environment *state, Matrix &action) override { 
+			agentModel.forward(state);
+			action = agentModel.output();
+		}
 	};
 }
 

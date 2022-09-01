@@ -18,14 +18,16 @@ public:
 
 
 namespace test {
+	using namespace test;
+
 	template <typename T>
 	class Environment: abstractEnvironment {
 		Environment(Matrix<T> *state) : abstractEnvironment() {
-			currentState = state;
+			this->currentState = state;
 		}
 		~Environment() {
-			if (currentState != nullptr) {
-				delete[] currentState;
+			if (this->currentState != nullptr) {
+				delete[] this->currentState;
 			}
 		}
 
