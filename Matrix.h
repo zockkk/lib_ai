@@ -53,6 +53,32 @@ public:
         }
     }
 
+    Matrix(const std::vector<std::vector<T>>& m) {
+        rows = m.size();
+        cols = m[0].size();
+
+        for (size_t i = 0; i < rows; i++) {
+            if (m[i].size() != cols) {
+                std::cout << "Error (601): m[i].size() != cols" << std::endl;
+                std::cin.get();
+                exit(-1);
+            }
+
+            for (size_t j = 0; j < cols; j++) {
+                p[i][j] = m[i][j];
+            }
+        }
+    }
+
+    Matrix(const std::vector<T>& m) {
+        rows = m.size();
+        cols = 0;
+
+        for (size_t i = 0; i < rows; i++) {
+            p[i][0] = m[i];
+        }
+    }
+
     Matrix(const MatrixSize &s, const T v = static_cast<T>(0.0)) : Matrix(s.rows, s.cols, v) {}
 
     Matrix(const Matrix &M) : Matrix(M.rows, M.cols) {
@@ -149,6 +175,26 @@ public:
         return std::move(A);
     }
 
+    static Matrix matrix(const std::vector<T>& m) {
+        size_t rows = m.size();
+        size_t cols = 0;
+
+        Matrix A(rows, cols);
+
+        for (size_t i = 0; i < rows; i++) {
+            if (m[i].size() != cols) {
+                std::cout << "Error (601): m[i].size() != cols" << std::endl;
+                std::cin.get();
+                exit(-1);
+            }
+
+            for (size_t j = 0; j < cols; j++) {
+                A.p[i][j] = m[i][j];
+            }
+        }
+        return std::move(A);
+    }
+
     static Matrix square(const size_t size, const T v = static_cast<T>(0.0)) {
         Matrix A(size, size, v);
         return std::move(A);
@@ -201,9 +247,9 @@ public:
         return std::move(A);
     }
 
-    virtual ~Matrix() {
+    ~Matrix() {
         if (data != nullptr) {
-            delete [] data;
+            delete data;
         }
 
         if (p != nullptr) {
@@ -225,7 +271,7 @@ public:
             exit(-1);
         }
         return p[i]; 
-    }//!!!!ÎØÈÁÊÈ
+    }
     const T* operator [] (const size_t i) const { 
         if (i >= rows) {
             std::cout << "Error (177: out of range)" << std::endl;
@@ -798,7 +844,7 @@ public:
         std::cout << std::endl;
     }
 
-    void to_vector(std::vector<T> &A) {
+    void to_vector(std::vector<T>& A) {
         A.resize(rows);
         for (size_t i = 0; i < rows; i++) {
             A[i] = p[i][0];
