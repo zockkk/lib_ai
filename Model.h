@@ -21,28 +21,31 @@ public:
 	std::vector<double> out() { return (*output); }
 };
 
-
 namespace test {
-	template <typename T>
-	class Model : abstractModel {
-		Model():abstractModel() {}
-		Model(const T& in_model, std::vector<double>* in, std::vector<double>* out):abstractModel(const T& in_model, std::vector<double>* in, std::vector<double>* out) {}
-		~Model():~abstractModel() {}
+	template <class T>
+	class Model : public abstractModel<T> {
+	public:
+		Model() : abstractModel() {}
+		Model(const T& in_model, std::vector<double>* in, std::vector<double>* out) : abstractModel(in_model, in, out) {}
+		~Model() {
+			if (this->input != nullptr) delete[] this->input;
+			if (this->output != nullptr) delete[] this->output;
+		}
 
 		void forward(Matrix<T>* A) override {
-			input = A;
-			for (size_t i = 0; i < input.size(); i++) {
-				for (size_t j = 0; j < output.size(); j++) {
-					output[i] += output[i] * input[i];
+			this->input = A;
+			for (size_t i = 0; i < this->input.size(); i++) {
+				for (size_t j = 0; j < this->output.size(); j++) {
+					this->output[i] += this->output[i] * this->input[i];
 				}
 			}
 		}
 
 		void getActoin() {
-			if (input != nullptr && output != nullptr) {
-				Model.setIn(input);
-				Model.setOut(output);
-				Model.forward();
+			if (this->input != nullptr && this->output != nullptr) {
+				this->model.setIn(this->input);
+				this->model.setOut(this->output);
+				this->model.forward();
 			}
 			else {
 				std::cout << "error Model \n";
