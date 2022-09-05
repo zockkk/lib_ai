@@ -1,89 +1,113 @@
 #pragma once
 #include "Matrix.h"
+#include "NeuralNetwork.h"
 
-template <typename T>
 class abstractModel {
-protected:
-	T model;
-	std::vector<double>* input;
-	std::vector<double>* output;
 public:
-	abstractModel() { model = 0; }
-	abstractModel(const T in_model, std::vector<double>* in, std::vector<double>* out) { model = in_model; input = in; out = output; }
+	Matrix<double>* input = nullptr;
+	Matrix<double>* output = nullptr;
+	abstractModel() {}
+	abstractModel(Matrix<double>* in, Matrix<double>* out) { input = in; out = output; }
 
 	void operator = (abstractModel& a) {
-		model = a.model;
-		for (size_t i = 0; i < input.size(); i++) {
-			(*input)[i] = (*a.input)[i];
+		for (size_t i = 0; i < input->getRows(); i++) {
+			(*input)[i][0] = (*a.input)[i][0];
 		}
-		for (size_t i = 0; i < output.size(); i++) {
-			(*output)[i] = (*a.output)[i];
+		for (size_t i = 0; i < output->getRows(); i++) {
+			(*output)[i][0] = (*a.output)[i][0];
 		}
 	}
-
 	void operator = (abstractModel &&a) {
-		swap(model,a.model);
-		swap(input, a.input);
-		swap(output, a.output);
+		input = a.input;
+		output = a.output;
 	}
 
-	~abstractModel() {
-		//if (input != nullptr) delete input;
-		//if (output != nullptr) delete output;
-	}
+	void setIn(Matrix<double>* in) { input = in; }
+	void setOut(Matrix<double>* out) { output = out; }
+	void setInOut(Matrix<double>* in, Matrix<double>* out) { input = in; output = out; }
+	//Matrix<double>* getOut() { return output; } !!!Need fix
 
-	virtual void forward(Matrix<double> &A) = 0;
+	virtual ~abstractModel() {}
 
-	//std::vector<double> out() { return (*output); }
+	virtual void forward() = 0;
+
 };
 
 namespace test {
-	template <class T>
-	class Model : public abstractModel<T> {
-	private:
-		T model;
-		std::vector<double> *input = nullptr;
-		std::vector<double> *output = nullptr;
+	//realisation model classes test
+
+	class Model : public abstractModel {
 	public:
-		Model() : abstractModel<T>() {}
-		Model(const T in_model, std::vector<double>* in, std::vector<double>* out) : abstractModel<T>(in_model, in, out) 
+		Matrix<double>* input = nullptr;
+		Matrix<double>* output = nullptr;
+		Model() : abstractModel() {}
+		Model(Matrix<double>* in, Matrix<double>* out) : abstractModel( in, out)
 		{ 
-			model = in_model; 
 			input = in;
-			output = out; }
-
-		void operator = (Model& a) {
-			model = a.model;
-			input = *a.input;
-			output = *a.output;
-		}
-		void operator = (Model&& a) {
-			swap(model, a.model);
-			swap(input, a.input);
-			swap(output, a.output);
+			output = out; 
 		}
 
-		~Model() {
+		virtual ~Model() override {
 			//if (input != nullptr) delete input;
-			//if (output != nullptr) delete output;
+			//if (output != nullptr) delete output; !!!Need fix
 		}
 
-		void forward(Matrix<double>& A) override {
-			//A.to_vector(input);
-			Matrix<double> out((*output));
-			Matrix<double> in((*input));
-			A = in + out;
+		virtual void forward() override {
+			(*output) = (*input)*0.01;
+		}
+	};
+
+	//text abstract model class ++
+	void testModel_001() {
+
+		std::cout << "start test\n";
+		Matrix<double> inModel(5, 5, 0.1);
+		Matrix<double> in({ 1, 2, 3, 4, 5 });
+		//in.print();
+		Matrix<double> out({ 3,5,7,3,4 });
+		Matrix<double> forwardOut(5, 1);
+		//forwardOut.print();
+		Model testModel(&in, &out);
+		testModel.forward();
+		out.print();
+	}
+
+
+	class ModelPerc :abstractModel {
+	private:
+		Layer lnn;
+	public:
+		ModelPerc() : abstractModel() {}
+		ModelPerc(Matrix<double>* in, Matrix<double>* out) : abstractModel(in, out) {
+			lnn = Layer(in, out);
+		}
+		virtual ~ModelPerc() override {}
+
+		virtual void forward() override {
+			lnn.forward();
 		}
 
-		void getActoin() {
-			if (this.input != nullptr && this.output != nullptr) {
-				this.model.setIn(this.input);
-				this.model.setOut(this.output);
-				this.model.forward();
-			}
-			else {
-				std::cout << "error Model \n";
-			}
-		}
+	};
+
+	//test abstract model feed forward ++
+	void testModel_002() {
+
+		std::cout << "start test\n";
+		Matrix<double> inModel(5, 5, 0.1);
+		Matrix<double> in({ 1, 2, 3, 4, 5 });
+		//in.print();
+		Matrix<double> out({ 3,5,7,3,4 });
+		Matrix<double> forwardOut(5, 1);
+		//forwardOut.print();
+		Model testModel(&in, &out);
+		testModel.forward();
+		out.print();
+	}
+}
+
+// Perceptron model realisation
+namespace percModel {
+	class Model {
+
 	};
 }

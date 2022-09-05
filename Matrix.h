@@ -40,8 +40,8 @@ public:
         cols = _cols;
         data = new T[rows * cols];
         p = new T*[rows];
-
         p[0] = data;
+
         for (size_t i = 1; i < rows; i++) {
             p[i] = p[i - 1] + cols;
         }
@@ -56,6 +56,12 @@ public:
     Matrix(const std::vector<std::vector<T>>& m) {
         rows = m.size();
         cols = m[0].size();
+        data = new T[rows * cols];
+        p = new T * [rows];
+        p[0] = data;
+        for (size_t i = 1; i < rows; i++) {
+            p[i] = p[i - 1] + cols;
+        }
 
         for (size_t i = 0; i < rows; i++) {
             if (m[i].size() != cols) {
@@ -72,7 +78,13 @@ public:
 
     Matrix(const std::vector<T>& m) {
         rows = m.size();
-        cols = 0;
+        cols = 1;
+        data = new T[rows * cols];
+        p = new T * [rows];
+        p[0] = data;
+        for (size_t i = 1; i < rows; i++) {
+            p[i] = p[i - 1] + cols;
+        }
 
         for (size_t i = 0; i < rows; i++) {
             p[i][0] = m[i];
@@ -177,7 +189,7 @@ public:
 
     static Matrix matrix(const std::vector<T>& m) {
         size_t rows = m.size();
-        size_t cols = 0;
+        size_t cols = 1;
 
         Matrix A(rows, cols);
 
@@ -600,7 +612,7 @@ public:
                 T sum = static_cast<T>(0.0);
 
                 for (size_t k = 0; k < A.cols; k++) {
-                    sum += A.p[i][k] * B.p[k][j];
+                    sum += A.p[i][k] * B[k];
                 }
 
                 C.p[i][j] = sum;
@@ -611,23 +623,23 @@ public:
     }
 
     friend Matrix operator * (const std::vector<T>& A, const Matrix& B) {
-        if (1 != B.rows) {
+        if (B.rows != 1) {
             std::cout << "Error (537): A.cols != B.rows" << std::endl;
                 std::cin.get();
                 exit(-1);
         }
 
-        Matrix C(A.size(), 1);
+        Matrix C(A.size(), B.cols);
 
-            for (size_t i = 0; i < C.rows; i++) {
-                for (size_t j = 0; j < C.cols; j++) {
-                    T sum = static_cast<T>(0.0);
+        for (size_t i = 0; i < C.rows; i++) {
+            for (size_t j = 0; j < C.cols; j++) {
+                T sum = static_cast<T>(0.0);
 
-                        for (size_t k = 0; k < A.cols; k++) {
-                            sum += A.p[i][k] * B.p[k][j];
-                        }
+                    for (size_t k = 0; k < A.cols; k++) {
+                        sum += A[i] * B.p[k][j];
+                    }
 
-                    C.p[i][j] = sum;
+                C.p[i][j] = sum;
                 }
             }
 

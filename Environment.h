@@ -2,41 +2,57 @@
 #include "Agent.h"
 #include "Model.h"
 
-template <typename T>
 class abstractEnvironment {
-protected:
-	Matrix<T> *currentState = nullptr;
-	double currentReward = 0.0;
+	
 public:
+	Matrix<double> *currentState = nullptr;
+	double currentReward = 0.0;
 	abstractEnvironment() {}
+	abstractEnvironment(Matrix<double> state) {
+		currentState = &state;
+	}
 	virtual ~abstractEnvironment() {}
 
-	virtual T nextState(Matrix<T> state, Matrix<T> action) = 0;
+	virtual bool nextState(Matrix<double> *state,const Matrix<double> &action) = 0;
 	double get_currentReward() { return currentReward; }
-	const Matrix<T> get_currentState() { return currentState; }
+	Matrix<double> get_currentState() const { return *currentState; }
 };
 
 
 namespace test {
-	using namespace test;
+	// realisation environment classes test
 
-	template <typename T>
-	class Environment: public abstractEnvironment<T> {
-		Environment(Matrix<T> *state) : abstractEnvironment() {
-			this->currentState = state;
+	class Environment: public abstractEnvironment {
+	public:
+		Environment(): abstractEnvironment() {}
+		Environment(Matrix<double> state) : abstractEnvironment(state) {
+			//this->currentState = state;
 		}
 		~Environment() {
-			if (this->currentState != nullptr) {
-				delete[] this->currentState;
-			}
+			//if (this->currentState != nullptr) {
+			//	delete this->currentState;
+			//}
 		}
 		
-		T nextState(Matrix<T> state,const Matrix<T> action) override {
-			if ((state + action).absValue() != 0) {
-				(*this->currentState) = state + action;
+		virtual bool nextState(Matrix<double> *state,const Matrix<double> &action) override {
+			if (normL1(*state + action) != 0) {
+				//std::cout << "OK\n";
+				this->currentState = state;
+				*this->currentState += action;
 				return true;
 			}
 			return false;
 		}
 	};
+
+	//test abstract environment class ++
+	void testEnvironment_001() {
+		std::cout << "start test\n";
+		Matrix<double> state({ 1,2,3,4,5 });
+		Matrix<double> action({ 3,4,5,3,4 });
+		Environment en(state);
+		en.nextState(&state, action);
+		state.print();
+
+	}
 }
