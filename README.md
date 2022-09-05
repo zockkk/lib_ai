@@ -1,1 +1,1 @@
-Realisation library for reinforsment learning on C++ 
+Realisation library for deep reinforsment learning on C++ 
