@@ -53,6 +53,10 @@ namespace test {
 		Environment en(state);
 		en.nextState(&state, action);
 		state.print();
-
 	}
+}
+
+namespace perc{
+	//environment for test regression
+	
 }

@@ -130,7 +130,6 @@ public:
 
             p = new T * [rows];
         }
-
         if ((old_rows != rows) || (old_cols != cols)) {
             p[0] = data;
             for (size_t i = 1; i < rows; i++) {
@@ -278,7 +277,7 @@ public:
 
     T* operator [] (const size_t i) { 
         if (i >= rows) {
-            std::cout << "Error (168: out of range)" << std::endl;
+            std::cout << "Error (281: out of range)" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -286,7 +285,7 @@ public:
     }
     const T* operator [] (const size_t i) const { 
         if (i >= rows) {
-            std::cout << "Error (177: out of range)" << std::endl;
+            std::cout << "Error (289: out of range)" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -295,7 +294,7 @@ public:
 
     void set(const size_t i, const size_t j, const T v) { 
         if (i >= rows || j >=cols) {
-            std::cout << "Error (187: out of range)" << std::endl;
+            std::cout << "Error (298: out of range)" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -303,7 +302,7 @@ public:
     }
     T& get(const size_t i, const size_t j) {
         if (i >= rows || j >= cols) {
-            std::cout << "Error (196: out of range)" << std::endl;
+            std::cout << "Error (306: out of range)" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -311,7 +310,7 @@ public:
     }
     const T& get(const size_t i, const size_t j) const { 
         if (i >= rows || j >= cols) {
-            std::cout << "Error (205: out of range)" << std::endl;
+            std::cout << "Error (314: out of range)" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -344,7 +343,7 @@ public:
 
     void operator += (const Matrix &A) {
         if ((A.rows != rows) || (A.cols != cols)) {
-            std::cout << "Error (237): (A.rows != rows) || (A.cols != cols)" << std::endl;
+            std::cout << "Error (347): (A.rows != rows) || (A.cols != cols)" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -358,7 +357,7 @@ public:
 
     void operator += (const std::vector<T>& A) {
         if ((A.size() != rows) || (cols != 1)) {
-            std::cout << "Error (303): (A.rows != rows) || (A.cols != cols)" << std::endl;
+            std::cout << "Error (361): (A.rows != rows) || (A.cols != cols)" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -370,7 +369,7 @@ public:
 
     void operator -= (const Matrix &A) {
         if ((A.rows != rows) || (A.cols != cols)) {
-            std::cout << "Error (255): (A.rows != rows) || (A.cols != cols)" << std::endl;
+            std::cout << "Error (373): (A.rows != rows) || (A.cols != cols)" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -384,7 +383,7 @@ public:
 
     void operator -= (const std::vector<T> &A) {
         if ((A.size() != rows) || (cols != 1)) {
-            std::cout << "Error (329): (A.rows != rows) || (A.cols != cols)" << std::endl;
+            std::cout << "Error (387): (A.rows != rows) || (A.cols != cols)" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -446,7 +445,7 @@ public:
 
     friend Matrix operator + (const Matrix &A, const Matrix &B) {
         if ((A.rows != B.rows) || (A.cols != B.cols)) {
-            std::cout << "Error (314): (A.rows != B.rows) || (A.cols != B.cols)" << std::endl;
+            std::cout << "Error (449): (A.rows != B.rows) || (A.cols != B.cols)" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -464,7 +463,7 @@ public:
 
     friend Matrix operator + (const Matrix &A, const std::vector<T> &B) {
         if ((A.rows != B.size()) || (A.cols != 1)) {
-            std::cout << "Error (409): (A.rows != B.rows) || (A.cols != B.cols)" << std::endl;
+            std::cout << "Error (467): (A.rows != B.rows) || (A.cols != B.cols)" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -480,7 +479,7 @@ public:
 
     friend Matrix operator + (const std::vector<T> &A, const Matrix& B) {
         if ((A.size() != B.rows) || (B.cols != 1)) {
-            std::cout << "Error (409): (A.rows != B.rows) || (A.cols != B.cols)" << std::endl;
+            std::cout << "Error (483): (A.rows != B.rows) || (A.cols != B.cols)" << std::endl;
                 std::cin.get();
                 exit(-1);
         }
@@ -496,7 +495,7 @@ public:
 
     friend Matrix operator - (const Matrix &A, const Matrix &B) {
         if ((A.rows != B.rows) || (A.cols != B.cols)) {
-            std::cout << "Error (336): (A.rows != B.rows) || (A.cols != B.cols)" << std::endl;
+            std::cout << "Error (499): (A.rows != B.rows) || (A.cols != B.cols)" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -514,7 +513,7 @@ public:
 
     friend Matrix operator - (const Matrix& A, const std::vector<T>& B) {
         if ((A.rows != B.size()) || (A.cols != 1)) {
-            std::cout << "Error (443): (A.rows != B.rows) || (A.cols != B.cols)" << std::endl;
+            std::cout << "Error (517): (A.rows != B.rows) || (A.cols != B.cols)" << std::endl;
                 std::cin.get();
                 exit(-1);
         }
@@ -530,7 +529,7 @@ public:
 
     friend Matrix operator - (const std::vector<T>& A, const Matrix& B) {
         if ((A.size() != B.rows) || (B.cols != 1)) {
-            std::cout << "Error (409): (A.rows != B.rows) || (A.cols != B.cols)" << std::endl;
+            std::cout << "Error (533): (A.rows != B.rows) || (A.cols != B.cols)" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -576,7 +575,7 @@ public:
 
     friend Matrix operator * (const Matrix &A, const Matrix &B) {
         if (A.cols != B.rows) {
-            std::cout << "Error (388): A.cols != B.rows" << std::endl;
+            std::cout << "Error (579): A.cols != B.rows" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -600,7 +599,7 @@ public:
 
     friend Matrix operator * (const Matrix& A, const std::vector<T>& B) {
         if (A.cols != B.size()) {
-            std::cout << "Error (513): A.cols != B.rows" << std::endl;
+            std::cout << "Error (603): A.cols != B.rows" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -624,7 +623,7 @@ public:
 
     friend Matrix operator * (const std::vector<T>& A, const Matrix& B) {
         if (B.rows != 1) {
-            std::cout << "Error (537): A.cols != B.rows" << std::endl;
+            std::cout << "Error (627): A.cols != B.rows" << std::endl;
                 std::cin.get();
                 exit(-1);
         }
@@ -660,7 +659,7 @@ public:
 
     Matrix inv() const {
         if (rows != cols) {
-            std::cout << "Error (432): rows != cols" << std::endl;
+            std::cout << "Error (663): rows != cols" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -679,7 +678,7 @@ public:
         T d = static_cast<T>(1.0);
 
         if (rows != cols) {
-            std::cout << "Error (454): rows != cols" << std::endl;
+            std::cout << "Error (682): rows != cols" << std::endl;
             std::cin.get();
             exit(-1);
         }
@@ -726,7 +725,7 @@ public:
 
     Matrix solve(const Matrix &_B) const {
         if ((rows != cols) || (cols != _B.rows)) {
-            std::cout << "Error (510): (rows != cols) || (cols != B.rows)" << std::endl;
+            std::cout << "Error (729): (rows != cols) || (cols != B.rows)" << std::endl;
             std::cin.get();
             exit(-1);
         }

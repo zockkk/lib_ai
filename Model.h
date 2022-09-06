@@ -18,8 +18,8 @@ public:
 		}
 	}
 	void operator = (abstractModel &&a) {
-		input = a.input;
-		output = a.output;
+		std::swap(input,a.input);
+		std::swap(output,a.output);
 	}
 
 	void setIn(Matrix<double>* in) { input = in; }
@@ -89,7 +89,7 @@ namespace test {
 
 	};
 
-	//test abstract model feed forward ++
+	// test abstract model feed forward ++
 	void testModel_002() {
 
 		std::cout << "start test\n";
@@ -106,8 +106,32 @@ namespace test {
 }
 
 // Perceptron model realisation
-namespace percModel {
-	class Model {
+namespace perc {
+	class Model : abstractModel{
+		// perceptron layer
+		perceptronLayer nnl;
+		// errors inputs and outputs
+		Matrix<double>* errX = nullptr;
+		Matrix<double>* errY = nullptr;
+	public:
+		Model(): abstractModel() {}
+		Model(Matrix<double>* in, Matrix<double>* out) : abstractModel(in, out) {
+			nnl = perceptronLayer(in, out);
+		}
 
+		virtual void forward() override {
+			nnl.forward();
+		}
+		void learn() { nnl.learn(); }
+
+		void set_errors(Matrix<double>* x, Matrix<double>* y) {
+			errX = x;
+			errY = y;
+			nnl.setErrX(errX);
+			nnl.setErrY(errY);
+		}
+		void print() {
+			nnl.print();
+		}
 	};
 }
