@@ -7,7 +7,7 @@ public:
 	Matrix<double>* input = nullptr;
 	Matrix<double>* output = nullptr;
 	abstractModel() {}
-	abstractModel(Matrix<double>* in, Matrix<double>* out) { input = in; out = output; }
+	abstractModel(Matrix<double>* in, Matrix<double>* out) { input = in; output = out; }
 
 	void operator = (abstractModel& a) {
 		for (size_t i = 0; i < input->getRows(); i++) {
@@ -29,7 +29,7 @@ public:
 
 	virtual ~abstractModel() {}
 
-	virtual void forward() = 0;
+	virtual void work() = 0;
 
 };
 
@@ -52,7 +52,7 @@ namespace test {
 			//if (output != nullptr) delete output; !!!Need fix
 		}
 
-		virtual void forward() override {
+		virtual void work() override {
 			(*output) = (*input)*0.01;
 		}
 	};
@@ -68,7 +68,7 @@ namespace test {
 		Matrix<double> forwardOut(5, 1);
 		//forwardOut.print();
 		Model testModel(&in, &out);
-		testModel.forward();
+		testModel.work();
 		out.print();
 	}
 
@@ -83,7 +83,7 @@ namespace test {
 		}
 		virtual ~ModelPerc() override {}
 
-		virtual void forward() override {
+		virtual void work() override {
 			lnn.forward();
 		}
 
@@ -100,7 +100,7 @@ namespace test {
 		Matrix<double> forwardOut(5, 1);
 		//forwardOut.print();
 		Model testModel(&in, &out);
-		testModel.forward();
+		testModel.work();
 		out.print();
 	}
 }
@@ -119,7 +119,7 @@ namespace perc {
 			nnl = perceptronLayer(in, out);
 		}
 
-		virtual void forward() override {
+		virtual void work() override {
 			nnl.forward();
 		}
 		void learn() { nnl.learn(); }
@@ -132,6 +132,58 @@ namespace perc {
 		}
 		void print() {
 			nnl.print();
+		}
+	};
+
+	class NN_Model :abstractModel {
+	private:
+		// perceptron neural network init
+		FC_perceptron NN;
+
+		// errors inputs and outputs
+		Matrix<double>* errX = nullptr;
+		Matrix<double>* errY = nullptr;
+
+		// initialisation NN side vectors check
+		bool check = false;
+	public:
+		NN_Model(): abstractModel(){}
+		NN_Model(Matrix<double>* in, Matrix<double>* out, std::vector<size_t> n_neurons) :abstractModel(in, out) {
+			NN = FC_perceptron(n_neurons);
+		}
+
+		~NN_Model(){}
+
+		void setter(Matrix<double>* x,Matrix<double> *y) { 
+			errX = x;
+			errY = y;
+			NN.set_side_vectors(input, output, errX, errY);
+			check = true;
+		}
+
+		virtual void work() override {
+			if (check) {
+				NN.forward();
+			}
+			else {
+				std::cout << "set side vectors please!!!";
+				std::cin.get();
+				exit(-1);
+			}
+		}
+		void learn_NN() {
+			if (check) {
+				NN.learn();
+			}
+			else {
+				std::cout << "set side vectors please!!!";
+				std::cin.get();
+				exit(-1);
+			}
+		}
+
+		friend void Print_Model(NN_Model& NNM) {
+			Print_NN(NNM.NN);
 		}
 	};
 }

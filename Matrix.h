@@ -543,14 +543,11 @@ public:
         return std::move(C);
     }
 
-    friend Matrix operator * (const Matrix &A, const T lambda)
-    {
+    friend Matrix operator * (const Matrix &A, const T lambda){
         Matrix B(A.rows, A.cols);
 
-        for (size_t i = 0; i < B.rows; i++)
-        {
-            for (size_t j = 0; j < B.cols; j++)
-            {
+        for (size_t i = 0; i < B.rows; i++){
+            for (size_t j = 0; j < B.cols; j++){
                 B.p[i][j] = A.p[i][j] * lambda;
             }
         }
@@ -558,14 +555,11 @@ public:
         return std::move(B);
     }
 
-    friend Matrix operator * (const T lambda, const Matrix &A)
-    {
+    friend Matrix operator * (const T lambda, const Matrix &A){
         Matrix B(A.rows, A.cols);
 
-        for (size_t i = 0; i < B.rows; i++)
-        {
-            for (size_t j = 0; j < B.cols; j++)
-            {
+        for (size_t i = 0; i < B.rows; i++){
+            for (size_t j = 0; j < B.cols; j++){
                 B.p[i][j] = lambda * A.p[i][j];
             }
         }
@@ -643,6 +637,20 @@ public:
             }
 
         return std::move(C);
+    }
+
+    friend Matrix Pow(Matrix& A, T p) {
+        Matrix B(A.rows, A.cols);
+
+        for (size_t i = 0; i < B.rows; i++)
+        {
+            for (size_t j = 0; j < B.cols; j++)
+            {
+                B.p[i][j] = std::pow(A.p[i][j],p);
+            }
+        }
+
+        return std::move(B);
     }
 
     Matrix t() const {

@@ -36,7 +36,7 @@ namespace test {
 
 		virtual void doAction(Matrix<double>* state) override {
 			agentModel->setIn(state);
-			agentModel->forward();
+			agentModel->work();
 		}
 
 		Matrix<double>* get() { return action; }
